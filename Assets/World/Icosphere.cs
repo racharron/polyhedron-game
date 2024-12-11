@@ -214,9 +214,12 @@ public class Icosphere
         {
             //ok here vertices[i] is a triangleVertex. We want to create the hexagon from it. first create new points from neighbors.
             int pivotIndex = newVertices.Count;
-            foreach (var n in vertex.Neighbors)
+            for (int n = 0; n < vertex.Neighbors.Length; n++)
             {
-                newVertices.Add((vertex.Position + vertices[n].Position) / 2);
+                var a = vertex.Position;
+                var b = vertices[vertex.Neighbors[n]].Position;
+                var c = vertices[vertex.Neighbors[(n+1)%vertex.Neighbors.Length]].Position;
+                newVertices.Add((a + b + c) / 3);
             }
             //now add the indices that triangulate the hex/pent to the newIndices list
             for (int i = 1; i < vertex.Neighbors.Length - 1; i++)
