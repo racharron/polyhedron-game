@@ -18,7 +18,8 @@ public class PlanetGenerator : MonoBehaviour
 
         for (int i = 0; i < Subdivisions; i++) icosphere.Subdivide();
 
-        meshFilter.mesh = icosphere.ToMesh();
+        meshFilter.mesh = icosphere.ToDualMesh();
+        meshFilter.mesh.name = "Test Goldenberg Polyhedron (" + Subdivisions + ")";
     }
 
     // Update is called once per frame
