@@ -120,27 +120,53 @@ public class Icosphere
             }
             Assert.AreEqual(count, 3);
         }
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            Debug.Log(i);
-            Debug.Log(vertices[i].Position);
-            Debug.Log(string.Join(", ", vertices[i].Neighbors));
-        }
     }
     public void Subdivide()
     {
-        var buffer = new List<TriangleVertex>(4 * vertices.Length);
-        buffer.AddRange(vertices);
+        var nextVertices= new List<TriangleVertex>(4 * vertices.Length);
+        nextVertices.AddRange(vertices);
+        int[][] midpoints = new int[vertices.Length][];
         foreach (var v in Enumerable.Range(0, vertices.Length))
         {
+            List<int> localMidpoints = new(vertices[v].Neighbors.Length);
             foreach (var neighbor in vertices[v].Neighbors)
             {
-                //  Avoid double counting.
-                if (v < neighbor)
+                if (midpoints[neighbor] == null)
                 {
-                    var midpoint = (vertices[v].Position + vertices[neighbor].Position) / 2;
-                    buffer.Add(new(midpoint.normalized, v, neighbor));
+                    var midPos = (vertices[v].Position + vertices[neighbor].Position) / 2;
+                    var midPoint = nextVertices.Count;
+                    nextVertices.Add(new(midPos.normalized, v, neighbor));
+                    localMidpoints.Add(midPoint);
+                } else
+                {
+                    localMidpoints.Add(midpoints[neighbor][Array.IndexOf(vertices[neighbor].Neighbors, v)]);
                 }
+            }
+            midpoints[v] = localMidpoints.ToArray();
+        }
+        foreach (var v in Enumerable.Range(0, vertices.Length))
+        {
+            for (int pre = 0; pre < vertices[v].Neighbors.Length; pre++)
+            {
+                int mid = (pre+1) % vertices[v].Neighbors.Length;
+                int post = (pre+2) % vertices[v].Neighbors.Length;
+                int pre_midpoint = midpoints[v][pre];
+                int midpoint = midpoints[v][mid];
+                int post_midpoint = midpoints[v][post];
+                //  We need to swap these around to maintain the winding order.
+                nextVertices[midpoint].AddAround(v, post_midpoint, pre_midpoint);
+                nextVertices[v].Neighbors[mid] = midpoint;
+            }
+        }
+        vertices = nextVertices.ToArray();
+        for (int v = 0; v < vertices.Length; v++)
+        {
+            Assert.IsFalse(vertices[v].Neighbors.Contains(-1));
+            Assert.IsFalse(vertices[v].Neighbors.Contains(v));
+            Assert.AreEqual(vertices[v].Neighbors.Distinct().Count(), vertices[v].Neighbors.Length);
+            for (int n = 0; n < vertices[v].Neighbors.Length; n++)
+            {
+                Assert.IsTrue(vertices[vertices[v].Neighbors[n]].Neighbors.Contains(v));
             }
         }
     }
@@ -156,7 +182,7 @@ public class Icosphere
             {
                 var a = v;
                 var b = vertices[v].Neighbors[n];
-                var c = vertices[v].Neighbors[(n + 1) % vertices[n].Neighbors.Length];
+                var c = vertices[v].Neighbors[(n + 1) % vertices[v].Neighbors.Length];
                 if (a < b && a < c)
                 {
                     var aPos = vertices[a].Position;

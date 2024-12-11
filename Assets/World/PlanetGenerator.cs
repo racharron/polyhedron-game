@@ -3,19 +3,20 @@ using UnityEngine;
 
 public class PlanetGenerator : MonoBehaviour
 {
-    static readonly float PHI = (1 + Mathf.Sqrt(5)) / 2;
-    static readonly float NORM_FACTOR = Mathf.Sqrt(1 + PHI * PHI);
-    static readonly float LONG = PHI / NORM_FACTOR;
-    static readonly float SHORT = 1 / NORM_FACTOR;
+    public uint Subdivisions = 0;
+    public Color Color = Color.white;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        meshRenderer.sharedMaterial.color = Color;
 
         MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
 
         Icosphere icosphere = new Icosphere();
+
+        for (int i = 0; i < Subdivisions; i++) icosphere.Subdivide();
 
         meshFilter.mesh = icosphere.ToMesh();
     }
