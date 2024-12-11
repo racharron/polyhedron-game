@@ -8,18 +8,23 @@ public class PlanetGenerator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
-        meshRenderer.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-        meshRenderer.sharedMaterial.color = Color;
-
-        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
 
         Icosphere icosphere = new Icosphere();
 
         for (int i = 0; i < Subdivisions; i++) icosphere.Subdivide();
 
-        meshFilter.mesh = icosphere.ToDualMesh();
-        meshFilter.mesh.name = "Test Goldenberg Polyhedron (" + Subdivisions + ")";
+        foreach (var mesh in icosphere.ToDualMeshTiles())
+        {
+
+            GameObject tile = new();
+            MeshRenderer meshRenderer = tile.AddComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            meshRenderer.sharedMaterial.color = Random.ColorHSV();
+
+            MeshFilter meshFilter = tile.AddComponent<MeshFilter>();
+            meshFilter.mesh = mesh;
+            tile.transform.SetParent(gameObject.transform, false);
+        }
     }
 
     // Update is called once per frame

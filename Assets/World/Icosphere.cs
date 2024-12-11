@@ -203,40 +203,40 @@ public class Icosphere
 
         return mesh;
     }
-    public Mesh ToDualMesh()
+    public List<Mesh> ToDualMeshTiles()
     {
         //create new mesh from this
-        List<Vector3> newVertices = new();
-        List<int> newIndices = new();
         List<Vector3> newNormals = new();
+        List<Mesh> meshes = new();
 
         foreach (var vertex in vertices)
         {
+            List<Vector3> positions = new();
+            List<int> indices = new();
+            Mesh mesh = new();
             //ok here vertices[i] is a triangleVertex. We want to create the hexagon from it. first create new points from neighbors.
-            int pivotIndex = newVertices.Count;
             for (int n = 0; n < vertex.Neighbors.Length; n++)
             {
                 var a = vertex.Position;
                 var b = vertices[vertex.Neighbors[n]].Position;
                 var c = vertices[vertex.Neighbors[(n+1)%vertex.Neighbors.Length]].Position;
-                newVertices.Add((a + b + c) / 3);
+                positions.Add((a + b + c) / 3);
             }
             //now add the indices that triangulate the hex/pent to the newIndices list
             for (int i = 1; i < vertex.Neighbors.Length - 1; i++)
             {
-                newIndices.Add(pivotIndex);
-                newIndices.Add(pivotIndex + i);
-                newIndices.Add(pivotIndex + i + 1);
+                indices.Add(0);
+                indices.Add(i);
+                indices.Add(i + 1);
             }
 
             //add normals to the new points we added.
-            newNormals.AddRange(Enumerable.Repeat(vertex.Position, vertex.Neighbors.Length));
+            mesh.vertices = positions.ToArray();
+            mesh.triangles = indices.ToArray();
+            mesh.normals = Enumerable.Repeat(vertex.Position, vertex.Neighbors.Length).ToArray();
+            meshes.Add(mesh);
         }
-        Mesh mesh = new();
-        mesh.vertices = newVertices.ToArray();
-        mesh.normals = newNormals.ToArray();
-        mesh.triangles = newIndices.ToArray();
 
-        return mesh;
+        return meshes;
     }
 }
