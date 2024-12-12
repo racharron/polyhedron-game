@@ -477,7 +477,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Subdivisions: 2
-  Color: {r: 0.25207198, g: 1, b: 0, a: 1}
 --- !u!4 &1259963736
 Transform:
   m_ObjectHideFlags: 0
@@ -522,8 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23e4ac4a6ef41e45badcfd99f9d650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Subdivisions: 3
-  Color: {r: 0, g: 0.86945295, b: 1, a: 1}
+  Subdivisions: 2
 --- !u!4 &1478557270
 Transform:
   m_ObjectHideFlags: 0
@@ -570,7 +568,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Subdivisions: 0
-  Color: {r: 1, g: 0, b: 0.28068638, a: 1}
 --- !u!4 &1738747034
 Transform:
   m_ObjectHideFlags: 0
