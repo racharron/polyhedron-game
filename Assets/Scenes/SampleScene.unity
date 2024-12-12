@@ -132,8 +132,10 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585550}
+  - component: {fileID: 330585549}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Player
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -266,17 +268,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6cc0ba6c1fe9f64b9e2fe43250ebb42, type: 3}
+  m_Script: {fileID: 11500000, guid: 74e790936405c26408901eea9810b525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 0.5
   zoomSpeed: 0.125
   minHeight: 1.25
   groundLevel: 1
-  enable: 1
   height: 4
   longditude: 0
   latitude: 0
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a0b3a2c0d753a4ab64b0c89f0fb159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &330585550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1241dd2a8b985b64a915ed52ebb3258c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cycleSpeed: 0.01
+  variationMagnitude: 0.125
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23e4ac4a6ef41e45badcfd99f9d650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Subdivisions: 2
+  Bisections: 0
 --- !u!4 &1259963736
 Transform:
   m_ObjectHideFlags: 0
@@ -521,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23e4ac4a6ef41e45badcfd99f9d650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Subdivisions: 2
+  Bisections: 0
 --- !u!4 &1478557270
 Transform:
   m_ObjectHideFlags: 0
@@ -567,7 +594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23e4ac4a6ef41e45badcfd99f9d650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Subdivisions: 0
+  Bisections: 0
 --- !u!4 &1738747034
 Transform:
   m_ObjectHideFlags: 0

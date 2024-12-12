@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UIElements;
 
 public class Icosphere
 {
@@ -54,9 +55,9 @@ public class Icosphere
         new(9, 8, 1),
     };
 
-    public TriangleVertex[] vertices {  get; private set; }
+    public readonly TriangleVertex[] vertices;
 
-    public Icosphere()
+    public Icosphere(uint bisections)
     {
         vertices = INITIAL_POSITIONS.Select(p => new TriangleVertex(p)).ToArray();
         for (int v = 0; v < vertices.Length; v++)
@@ -73,7 +74,7 @@ public class Icosphere
                 {
                     if (surroundingEdges[i].b == surroundingEdges[j].a)
                     {
-                        (surroundingEdges[j], surroundingEdges[i+1]) = (surroundingEdges[i+1], surroundingEdges[j]);
+                        (surroundingEdges[j], surroundingEdges[i + 1]) = (surroundingEdges[i + 1], surroundingEdges[j]);
                         break;
                     }
                 }
@@ -84,7 +85,57 @@ public class Icosphere
             //  Debug code
             for (int i = 0; i < surroundingEdges.Count; i++)
             {
-                Assert.AreEqual(surroundingEdges[i].b, surroundingEdges[(i+1)%surroundingEdges.Count].a);
+                Assert.AreEqual(surroundingEdges[i].b, surroundingEdges[(i + 1) % surroundingEdges.Count].a);
+            }
+        }
+        for (int i = 0; i < bisections; i++)
+        {
+            var nextVertices = new List<TriangleVertex>(4 * vertices.Length);
+            nextVertices.AddRange(vertices);
+            int[][] midpoints = new int[vertices.Length][];
+            foreach (var v in Enumerable.Range(0, vertices.Length))
+            {
+                List<int> localMidpoints = new(vertices[v].Neighbors.Length);
+                foreach (var neighbor in vertices[v].Neighbors)
+                {
+                    if (midpoints[neighbor] == null)
+                    {
+                        var midPos = (vertices[v].Position + vertices[neighbor].Position) / 2;
+                        var midPoint = nextVertices.Count;
+                        nextVertices.Add(new(midPos.normalized, v, neighbor));
+                        localMidpoints.Add(midPoint);
+                    }
+                    else
+                    {
+                        localMidpoints.Add(midpoints[neighbor][Array.IndexOf(vertices[neighbor].Neighbors, v)]);
+                    }
+                }
+                midpoints[v] = localMidpoints.ToArray();
+            }
+            foreach (var v in Enumerable.Range(0, vertices.Length))
+            {
+                for (int pre = 0; pre < vertices[v].Neighbors.Length; pre++)
+                {
+                    int mid = (pre + 1) % vertices[v].Neighbors.Length;
+                    int post = (pre + 2) % vertices[v].Neighbors.Length;
+                    int pre_midpoint = midpoints[v][pre];
+                    int midpoint = midpoints[v][mid];
+                    int post_midpoint = midpoints[v][post];
+                    //  We need to swap these around to maintain the winding order.
+                    nextVertices[midpoint].AddAround(v, post_midpoint, pre_midpoint);
+                    nextVertices[v].Neighbors[mid] = midpoint;
+                }
+            }
+            vertices = nextVertices.ToArray();
+            for (int v = 0; v < vertices.Length; v++)
+            {
+                Assert.IsFalse(vertices[v].Neighbors.Contains(-1));
+                Assert.IsFalse(vertices[v].Neighbors.Contains(v));
+                Assert.AreEqual(vertices[v].Neighbors.Distinct().Count(), vertices[v].Neighbors.Length);
+                for (int n = 0; n < vertices[v].Neighbors.Length; n++)
+                {
+                    Assert.IsTrue(vertices[vertices[v].Neighbors[n]].Neighbors.Contains(v));
+                }
             }
         }
         //  Debug code
@@ -121,55 +172,6 @@ public class Icosphere
             Assert.AreEqual(count, 3);
         }
     }
-    public void Subdivide()
-    {
-        var nextVertices= new List<TriangleVertex>(4 * vertices.Length);
-        nextVertices.AddRange(vertices);
-        int[][] midpoints = new int[vertices.Length][];
-        foreach (var v in Enumerable.Range(0, vertices.Length))
-        {
-            List<int> localMidpoints = new(vertices[v].Neighbors.Length);
-            foreach (var neighbor in vertices[v].Neighbors)
-            {
-                if (midpoints[neighbor] == null)
-                {
-                    var midPos = (vertices[v].Position + vertices[neighbor].Position) / 2;
-                    var midPoint = nextVertices.Count;
-                    nextVertices.Add(new(midPos.normalized, v, neighbor));
-                    localMidpoints.Add(midPoint);
-                } else
-                {
-                    localMidpoints.Add(midpoints[neighbor][Array.IndexOf(vertices[neighbor].Neighbors, v)]);
-                }
-            }
-            midpoints[v] = localMidpoints.ToArray();
-        }
-        foreach (var v in Enumerable.Range(0, vertices.Length))
-        {
-            for (int pre = 0; pre < vertices[v].Neighbors.Length; pre++)
-            {
-                int mid = (pre+1) % vertices[v].Neighbors.Length;
-                int post = (pre+2) % vertices[v].Neighbors.Length;
-                int pre_midpoint = midpoints[v][pre];
-                int midpoint = midpoints[v][mid];
-                int post_midpoint = midpoints[v][post];
-                //  We need to swap these around to maintain the winding order.
-                nextVertices[midpoint].AddAround(v, post_midpoint, pre_midpoint);
-                nextVertices[v].Neighbors[mid] = midpoint;
-            }
-        }
-        vertices = nextVertices.ToArray();
-        for (int v = 0; v < vertices.Length; v++)
-        {
-            Assert.IsFalse(vertices[v].Neighbors.Contains(-1));
-            Assert.IsFalse(vertices[v].Neighbors.Contains(v));
-            Assert.AreEqual(vertices[v].Neighbors.Distinct().Count(), vertices[v].Neighbors.Length);
-            for (int n = 0; n < vertices[v].Neighbors.Length; n++)
-            {
-                Assert.IsTrue(vertices[vertices[v].Neighbors[n]].Neighbors.Contains(v));
-            }
-        }
-    }
     public Mesh ToMesh()
     {
         Mesh mesh = new Mesh();
@@ -199,44 +201,26 @@ public class Icosphere
         mesh.normals = normals.ToArray();
         mesh.triangles = Enumerable.Range(0, positions.Count).ToArray();
 
-        mesh.name = "Debug Icosphere";
+        mesh.name = "Icosphere";
 
         return mesh;
     }
-    public List<Mesh> ToDualMeshTiles()
+    public Polygon[] Dual()
     {
-        //create new mesh from this
-        List<Vector3> newNormals = new();
-        List<Mesh> meshes = new();
-
+        List<Polygon> polygons = new(vertices.Length);
         foreach (var vertex in vertices)
         {
-            List<Vector3> positions = new();
-            List<int> indices = new();
-            Mesh mesh = new();
+            List<Vector3> polygonVertices = new(vertices.Length);
             //ok here vertices[i] is a triangleVertex. We want to create the hexagon from it. first create new points from neighbors.
             for (int n = 0; n < vertex.Neighbors.Length; n++)
             {
                 var a = vertex.Position;
                 var b = vertices[vertex.Neighbors[n]].Position;
-                var c = vertices[vertex.Neighbors[(n+1)%vertex.Neighbors.Length]].Position;
-                positions.Add((a + b + c) / 3);
+                var c = vertices[vertex.Neighbors[(n + 1) % vertex.Neighbors.Length]].Position;
+                polygonVertices.Add((a + b + c) / 3);
             }
-            //now add the indices that triangulate the hex/pent to the newIndices list
-            for (int i = 1; i < vertex.Neighbors.Length - 1; i++)
-            {
-                indices.Add(0);
-                indices.Add(i);
-                indices.Add(i + 1);
-            }
-
-            //add normals to the new points we added.
-            mesh.vertices = positions.ToArray();
-            mesh.triangles = indices.ToArray();
-            mesh.normals = Enumerable.Repeat(vertex.Position, vertex.Neighbors.Length).ToArray();
-            meshes.Add(mesh);
+            polygons.Add(new(polygonVertices.ToArray(), polygonVertices.Aggregate((a, b) => a+b) / vertices.Length, vertex.Position));
         }
-
-        return meshes;
+        return polygons.ToArray();
     }
 }
