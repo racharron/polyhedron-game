@@ -17,6 +17,7 @@ public class PlanetGenerator : MonoBehaviour
         {
 
             GameObject tile = new();
+            tile.name = "World Tile";
             MeshRenderer meshRenderer = tile.AddComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
             meshRenderer.sharedMaterial.color = Random.ColorHSV();
