@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlanetGenerator : MonoBehaviour
 {
     public uint Subdivisions = 0;
-    public Color Color = Color.white;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
