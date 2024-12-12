@@ -19,25 +19,8 @@ public class ArcBallCamera: MonoBehaviour
 
     void Start()
     {
-        this.transform.position = Cartesian();
-        this.transform.LookAt(target);
-    }
-
-    Vector3 getSphericalCoordinates(Vector3 cartesian)
-    {
-        float r = Mathf.Sqrt(
-            Mathf.Pow(cartesian.x, 2) +
-            Mathf.Pow(cartesian.y, 2) +
-            Mathf.Pow(cartesian.z, 2)
-        );
-
-        float phi = Mathf.Atan2(cartesian.z / cartesian.x, cartesian.x);
-        float theta = Mathf.Acos(cartesian.y / r);
-
-        if (cartesian.x < 0)
-            phi += Mathf.PI;
-
-        return new Vector3(r, phi, theta);
+        transform.position = Cartesian();
+        transform.LookAt(target);
     }
 
     Vector3 Cartesian()
