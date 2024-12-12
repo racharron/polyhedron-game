@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.Linq;
 using UnityEngine;
 
-public class TriangleVertex
+public struct TriangleVertex
 {
     readonly static int DEFAULT_PRE_A = 0;
     readonly static int DEFAULT_A = 1;
@@ -15,6 +15,7 @@ public class TriangleVertex
     public TriangleVertex(Vector3 Position)
     {
         this.Position = Position;
+        this.Neighbors = null;
     } 
     public TriangleVertex(Vector3 Position, int a, int b)
     {

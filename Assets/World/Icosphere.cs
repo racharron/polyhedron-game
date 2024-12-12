@@ -54,7 +54,7 @@ public class Icosphere
         new(9, 8, 1),
     };
 
-    TriangleVertex[] vertices;
+    public TriangleVertex[] vertices {  get; private set; }
 
     public Icosphere()
     {

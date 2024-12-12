@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlanetGenerator : MonoBehaviour
@@ -13,18 +15,26 @@ public class PlanetGenerator : MonoBehaviour
 
         for (int i = 0; i < Subdivisions; i++) icosphere.Subdivide();
 
+        List<GameObject> tiles = new(icosphere.vertices.Length);
         foreach (var mesh in icosphere.ToDualMeshTiles())
         {
 
-            GameObject tile = new();
-            tile.name = "World Tile";
-            MeshRenderer meshRenderer = tile.AddComponent<MeshRenderer>();
+            GameObject childObject = new();
+            childObject.name = "World Tile";
+            MeshRenderer meshRenderer = childObject.AddComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
             meshRenderer.sharedMaterial.color = Random.ColorHSV();
 
-            MeshFilter meshFilter = tile.AddComponent<MeshFilter>();
+            MeshFilter meshFilter = childObject.AddComponent<MeshFilter>();
             meshFilter.mesh = mesh;
-            tile.transform.SetParent(gameObject.transform, false);
+            childObject.AddComponent<Tile>();
+            childObject.transform.SetParent(gameObject.transform, false);
+            tiles.Add(childObject);
+        }
+        Assert.AreEqual(tiles.Count, icosphere.vertices.Length);
+        for (int i = 0; i < icosphere.vertices.Length; i++)
+        {
+            tiles[i].GetComponent<Tile>().neighbors = icosphere.vertices[i].Neighbors.Select(n => tiles[n]).ToArray();
         }
     }
 
