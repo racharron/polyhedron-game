@@ -269,9 +269,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6cc0ba6c1fe9f64b9e2fe43250ebb42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 1
-  initialRadius: 5
-  minRadius: 1
+  rotationSpeed: 0.125
+  zoomSpeed: 0.5
+  minHeight: 2
+  groundLevel: 1
+  enable: 1
+  height: 4
+  longditude: 0
+  latitude: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
