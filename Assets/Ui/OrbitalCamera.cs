@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class OrbitalCamera : MonoBehaviour
 {
-    public float rotationSpeed = 0.5f, zoomSpeed = 0.125f;
+    public float rotationSpeed = 0.07f, zoomSpeed = 0.125f;
     public float minHeight = 1.25f, groundLevel = 1f;
 
     public float scroll;
@@ -38,8 +38,8 @@ public class OrbitalCamera : MonoBehaviour
         }
         if (pan != Vector2.zero)
         {
-            // Get the deltas that describe how much the mouse cursor got moved between frames
-            var delta = (1 - groundLevel / height) * rotationSpeed * pan;
+            // Get the deltas that describe how much the mouse cursor got moved between frames 
+            var delta = (rotationSpeed * pan)*(height - groundLevel);
 
             // Rotate the camera left and right
             longditude += delta.x * Time.deltaTime;
