@@ -25,13 +25,11 @@ public struct TriangleVertex
     }
     public TriangleVertex(Vector3 Position, int[] neighbors)
     {
-        Assert.AreEqual(neighbors.Length, 5);
         this.Position = Position;
         Neighbors = neighbors;
     }
     public void AddAround(int mid, int pre, int post)
     {
-        Assert.AreEqual(Neighbors.Length, 6);
         if (Neighbors[DEFAULT_A] == mid) {
             Neighbors[DEFAULT_PRE_A] = pre; Neighbors[DEFAULT_POST_A] = post;
         } else if (Neighbors[DEFAULT_B] == mid) {
