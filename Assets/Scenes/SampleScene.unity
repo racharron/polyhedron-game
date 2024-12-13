@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1241dd2a8b985b64a915ed52ebb3258c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cycleSpeed: 0.01
+  cycleSpeed: 8
   variationMagnitude: 0.125
 --- !u!1 &410087039
 GameObject:

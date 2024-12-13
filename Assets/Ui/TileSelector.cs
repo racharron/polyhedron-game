@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
-    public float cycleSpeed = 0.01f;
+    public float cycleSpeed = 8;
     public float variationMagnitude = 0.125f;
     Tile selected = null;
     float phase = 0;
@@ -32,8 +32,8 @@ public class TileSelector : MonoBehaviour
             float variance = Mathf.Sin(phase);
             Color selectedColor = Color.HSVToRGB(hue, saturation + variationMagnitude * variance, value + variationMagnitude * variance);
             selected.gameObject.GetComponent<MeshRenderer>().material.color = selectedColor;
-            phase = (phase + cycleSpeed * Time.deltaTime) % 2*Mathf.PI;
-            Debug.Log(Time.deltaTime);
+            phase += cycleSpeed * Time.deltaTime;
+            if (phase > 2 * Mathf.PI) phase -= 2 * Mathf.PI;
         }
     }
 }
