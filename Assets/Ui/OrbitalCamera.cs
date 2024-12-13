@@ -55,12 +55,8 @@ public class OrbitalCamera : MonoBehaviour
 
     private void UpdateTransform()
     {
-        Transform parent = gameObject.transform.parent;
-        // Calculate the cartesian coordinates for unity
-        transform.position = Cartesian() + parent.position;
-
-        // Make the camera look at the target
-        transform.LookAt(parent.position, parent.up);
+        var cartesian = Cartesian();
+        transform.SetLocalPositionAndRotation(cartesian, Quaternion.LookRotation(-cartesian, Up()));
     }
 
     private Vector3 Up()
