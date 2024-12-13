@@ -16,6 +16,12 @@ public class Controls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard.escapeKey.IsPressed())
+        {
+            Application.Quit();
+            return;
+        }
         Mouse mouse = Mouse.current;
 
         var orbitalCamera = GetComponent<OrbitalCamera>();
@@ -31,7 +37,7 @@ public class Controls : MonoBehaviour
             Ray fromMouse = Camera.main.ScreenPointToRay(mouse.position.value);
             if (
                 canSelect
-                && Physics.Raycast(fromMouse, out RaycastHit hit, LayerMask.GetMask("UI"))
+                && Physics.Raycast(fromMouse, out RaycastHit hit)
                 && hit.collider.gameObject.TryGetComponent(out Tile selected)
             )
             {

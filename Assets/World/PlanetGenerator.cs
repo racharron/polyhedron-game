@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlanetGenerator : MonoBehaviour
 {
     public uint Bisections = 0;
+    public Material TileMaterial;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,9 +17,9 @@ public class PlanetGenerator : MonoBehaviour
         for (int i = 0; i < dual.Length; i++)
         {
 
-            GameObject worldFacet = new() { name = "World Tile " + i, layer = LayerMask.NameToLayer("UI") };
+            GameObject worldFacet = new() { name = "World Tile " + i };
             MeshRenderer meshRenderer = worldFacet.AddComponent<MeshRenderer>();
-            meshRenderer.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            meshRenderer.sharedMaterial = TileMaterial;
 
             MeshFilter meshFilter = worldFacet.AddComponent<MeshFilter>();
             Mesh mesh = dual[i].ToMesh();
