@@ -6,7 +6,7 @@ public class Tile : MonoBehaviour
     public float wealth, production, offense, defense;
     public GameObject[] neighbors;
 
-    public Color baseColor {  get; private set; }
+    public Color baseColor { get; private set; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

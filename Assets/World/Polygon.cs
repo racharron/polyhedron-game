@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public struct Polygon
 {
     public readonly Vector3[] Vertices;
     public readonly Vector3 Centroid;
     public readonly Vector3 Normal;
-    public readonly Polygon Centered { get {
+    public readonly Polygon Centered
+    {
+        get
+        {
             var centroid = Centroid;
             return new(Vertices.Select(v => v - centroid).ToArray(), Vector3.zero, Normal);
         }

@@ -1,11 +1,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class OrbitalCamera: MonoBehaviour
+public class OrbitalCamera : MonoBehaviour
 {
     public float rotationSpeed = 0.5f, zoomSpeed = 0.125f;
     public float minHeight = 1.25f, groundLevel = 1f;
-    
+
     public class Movement
     {
         public Vector2 pan;

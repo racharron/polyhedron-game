@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,10 +32,9 @@ public class PlanetGenerator : MonoBehaviour
                 Quaternion.LookRotation(Vector3.Cross(dual[i].Normal, dual[i][0] - dual[i].Centroid), dual[i].Normal)
             );
             tileBase.transform.SetParent(worldFacet.transform, false);
-            
+
             worldFacets.Add(worldFacet);
         }
-        Assert.AreEqual(worldFacets.Count, icosphere.vertices.Length);
         for (int i = 0; i < icosphere.vertices.Length; i++)
         {
             worldFacets[i].GetComponent<Tile>().neighbors = icosphere.vertices[i].Neighbors.Select(n => worldFacets[n]).ToArray();

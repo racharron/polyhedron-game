@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Linq;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public struct TriangleVertex
     {
         this.Position = Position;
         this.Neighbors = null;
-    } 
+    }
     public TriangleVertex(Vector3 Position, int a, int b)
     {
         this.Position = Position;
@@ -30,9 +29,12 @@ public struct TriangleVertex
     }
     public void AddAround(int mid, int pre, int post)
     {
-        if (Neighbors[DEFAULT_A] == mid) {
+        if (Neighbors[DEFAULT_A] == mid)
+        {
             Neighbors[DEFAULT_PRE_A] = pre; Neighbors[DEFAULT_POST_A] = post;
-        } else if (Neighbors[DEFAULT_B] == mid) {
+        }
+        else if (Neighbors[DEFAULT_B] == mid)
+        {
             Neighbors[DEFAULT_PRE_B] = pre; Neighbors[DEFAULT_POST_B] = post;
         }
     }
