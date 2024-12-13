@@ -166,7 +166,7 @@ public class Icosphere
                 var c = vertices[vertex.Neighbors[(n + 1) % vertex.Neighbors.Length]].Position;
                 polygonVertices.Add((a + b + c) / 3);
             }
-            polygons.Add(new(polygonVertices.ToArray(), polygonVertices.Aggregate((a, b) => a + b) / vertices.Length, vertex.Position));
+            polygons.Add(new(polygonVertices.ToArray(), polygonVertices.Aggregate((a, b) => a + b) / polygonVertices.Count, vertex.Position));
         }
         return polygons.ToArray();
     }

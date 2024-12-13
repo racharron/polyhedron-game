@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Tile : MonoBehaviour
 {
-    public float wealth, production, offense, defense;
+    public float wealth, production, offense, defense, infrastructure;
     public GameObject[] neighbors;
 
     public Color baseColor { get; private set; }

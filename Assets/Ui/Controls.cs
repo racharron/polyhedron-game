@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(OrbitalCamera))]
@@ -7,6 +8,9 @@ public class Controls : MonoBehaviour
 {
     //  Indicates that the mouse hasn't moved while the select mouse button was held down.
     bool canSelect = false;
+
+    public static UnityEvent nextTurn = new();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -48,5 +52,6 @@ public class Controls : MonoBehaviour
                 gameObject.GetComponent<TileSelector>().Deselect();
             }
         }
+        if (keyboard.spaceKey.wasPressedThisFrame) nextTurn.Invoke();
     }
 }
