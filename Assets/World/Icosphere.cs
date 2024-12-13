@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UIElements;
 
 public class Icosphere
 {
@@ -68,7 +65,6 @@ public class Icosphere
                 var opposite = triangle.OppositeEdge(v);
                 if (opposite != null) surroundingEdges.Add(opposite);
             }
-            Assert.AreEqual(surroundingEdges.Count, 5);
             for (int i = 0; i < surroundingEdges.Count - 2; i++) {
                 for (int j = i + 2; j < surroundingEdges.Count; j++)
                 {
@@ -80,13 +76,6 @@ public class Icosphere
                 }
             }
             vertices[v].Neighbors = surroundingEdges.Select(e => e.a).ToArray();
-            Assert.AreEqual(vertices[v].Neighbors.Length, 5);
-            Assert.AreEqual(vertices[v].Neighbors.Distinct().Count(), 5);
-            //  Debug code
-            for (int i = 0; i < surroundingEdges.Count; i++)
-            {
-                Assert.AreEqual(surroundingEdges[i].b, surroundingEdges[(i + 1) % surroundingEdges.Count].a);
-            }
         }
         for (int i = 0; i < bisections; i++)
         {
@@ -127,49 +116,6 @@ public class Icosphere
                 }
             }
             vertices = nextVertices.ToArray();
-            for (int v = 0; v < vertices.Length; v++)
-            {
-                Assert.IsFalse(vertices[v].Neighbors.Contains(-1));
-                Assert.IsFalse(vertices[v].Neighbors.Contains(v));
-                Assert.AreEqual(vertices[v].Neighbors.Distinct().Count(), vertices[v].Neighbors.Length);
-                for (int n = 0; n < vertices[v].Neighbors.Length; n++)
-                {
-                    Assert.IsTrue(vertices[vertices[v].Neighbors[n]].Neighbors.Contains(v));
-                }
-            }
-        }
-        //  Debug code
-        
-        for (int n = 0; n < vertices.Length; n++)
-        {
-            bool found = false;
-            for (int v = 0; v < vertices.Length; v++)
-            {
-                if (vertices[v].Neighbors.Contains(n)) found = true;
-            }
-            Assert.IsTrue(found);
-        }
-        foreach (var triangle in INITIAL_TRIANGLES) {
-            int count = 0;
-            foreach (var v in Enumerable.Range(0, vertices.Length))
-            {
-                foreach (var i in Enumerable.Range(0, vertices[v].Neighbors.Length))
-                {
-                    var j = (i + 1) % vertices[v].Neighbors.Length;
-                    var a = v;
-                    var b = vertices[v].Neighbors[i];
-                    var c = vertices[v].Neighbors[j];
-                    if (
-                        (triangle.a == a && triangle.b == b && triangle.c == c)
-                        || (triangle.b == a && triangle.c == b && triangle.a == c)
-                        || (triangle.c == a && triangle.a == b && triangle.b == c)
-                        )
-                    {
-                        count++;
-                    }
-                }
-            }
-            Assert.AreEqual(count, 3);
         }
     }
     public Mesh ToMesh()
