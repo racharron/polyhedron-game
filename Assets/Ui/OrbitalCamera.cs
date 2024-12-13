@@ -6,14 +6,8 @@ public class OrbitalCamera : MonoBehaviour
     public float rotationSpeed = 0.5f, zoomSpeed = 0.125f;
     public float minHeight = 1.25f, groundLevel = 1f;
 
-    public class Movement
-    {
-        public Vector2 pan;
-        public float zoom;
-    }
-
-    //  Deleted after every update, so this is the movement for this frame.
-    public Movement movement;
+    public float scroll;
+    public Vector2 pan;
 
     public float height = 4f, longditude = 0f, latitude = 0f;
 
@@ -34,14 +28,18 @@ public class OrbitalCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (movement != null)
+        bool update = false;
+        if (scroll != 0)
         {
-            var sr = Mathf.Exp(zoomSpeed * movement.zoom);
+            var sr = Mathf.Exp(zoomSpeed * scroll);
             height = Mathf.Max((height - groundLevel) * sr + groundLevel, minHeight);
-
+            scroll = 0;
+            update = true;
+        }
+        if (pan != Vector2.zero)
+        {
             // Get the deltas that describe how much the mouse cursor got moved between frames
-            var delta = (1 - groundLevel / height) * rotationSpeed * movement.pan;
-            //  A scale factor.
+            var delta = (1 - groundLevel / height) * rotationSpeed * pan;
 
             // Rotate the camera left and right
             longditude += delta.x * Time.deltaTime;
@@ -49,9 +47,10 @@ public class OrbitalCamera : MonoBehaviour
             // Rotate the camera up and down
             // Prevent the camera from turning upside down (1.5f = approx. Pi / 2)
             latitude = Mathf.Clamp(latitude + delta.y * Time.deltaTime, -Mathf.PI / 2, Mathf.PI / 2);
-            UpdateTransform();
-            movement = null;
+            pan = Vector2.zero;
+            update = true;
         }
+        if (update) UpdateTransform();
     }
 
     private void UpdateTransform()

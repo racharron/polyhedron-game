@@ -17,14 +17,15 @@ public class Controls : MonoBehaviour
     void Update()
     {
         Mouse mouse = Mouse.current;
-        var zoom = -mouse.scroll.y.value;
-        var pan = -mouse.delta.value;
-        if (mouse.press.wasPressedThisFrame) canSelect = true;
-        canSelect &= zoom == 0 && pan == Vector2.zero;
-        if (zoom != 0 || (mouse.press.isPressed && !mouse.press.wasPressedThisFrame && pan != Vector2.zero))
+
+        var orbitalCamera = GetComponent<OrbitalCamera>();
+        orbitalCamera.scroll = -mouse.scroll.y.value;
+        if (mouse.press.isPressed) orbitalCamera.pan = -mouse.delta.value;
+        if (mouse.press.wasPressedThisFrame)
         {
-            gameObject.GetComponent<OrbitalCamera>().movement = new() { zoom = zoom, pan = pan };
+            canSelect = true;
         }
+        canSelect &= orbitalCamera.scroll == 0 && orbitalCamera.pan == Vector2.zero;
         if (canSelect && mouse.press.wasReleasedThisFrame)
         {
             Ray fromMouse = Camera.main.ScreenPointToRay(mouse.position.value);
