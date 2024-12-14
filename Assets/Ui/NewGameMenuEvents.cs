@@ -35,11 +35,12 @@ public class HostGameMenuEvents : MonoBehaviour
         string text = seed.text.Trim();
         if (int.TryParse(text, out int value))
         {
-            Random.InitState(value);
+            PlanetGenerator.Random = new System.Random(value);
             return true;
         } 
         else if (text == "")
         {
+            PlanetGenerator.Random = new System.Random();
             return true;
         }
         else

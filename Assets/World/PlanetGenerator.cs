@@ -12,6 +12,8 @@ public class PlanetGenerator : MonoBehaviour
 
     static readonly float TILE_UI_OFFSET = 0.01f;
 
+    public static System.Random Random { private get; set; }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,14 +31,14 @@ public class PlanetGenerator : MonoBehaviour
             MeshFilter meshFilter = worldFacet.AddComponent<MeshFilter>();
             Mesh mesh = dual[i].ToMesh();
             meshFilter.mesh = mesh;
-            worldFacet.AddComponent<Tile>().baseColor = Random.ColorHSV(0, 1, 0.5f, 0.5f, 0.5f, 0.5f, 1, 1);
+            worldFacet.AddComponent<Tile>().baseColor = Color.HSVToRGB(RandomFloat(), 0.5f, 0.5f);
             worldFacet.AddComponent<MeshCollider>().sharedMesh = mesh;
             worldFacet.AddComponent<TileState>().state = new()
             {
-                liquidity = Random.Range(1f, 10f),
-                development = Random.Range(1f, 10f),
-                infrastructure = Random.Range(1f, 10f),
-                technology = Random.Range(1f, 10f)
+                liquidity = RandomFloat(1f, 10f),
+                development = RandomFloat(1f, 10f),
+                infrastructure = RandomFloat(1f, 10f),
+                technology = RandomFloat(1f, 10f)
             };
             worldFacet.transform.SetParent(gameObject.transform, false);
             var tileUi = Instantiate(TileCanvas, worldFacet.transform);
@@ -49,8 +51,15 @@ public class PlanetGenerator : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// In the range [0, 1]
+    /// </summary>
+    static float RandomFloat()
     {
+        return (float)Random.NextDouble();
+    }
+    static float RandomFloat(float min, float max)
+    {
+        return min + (max - min) * RandomFloat();
     }
 }
