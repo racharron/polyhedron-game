@@ -65,4 +65,25 @@ public struct State
             };
         }
     }
+    public static string DisplayQuantity(float quantity)
+    {
+        if (quantity < 0) return "-";
+        else if (quantity < 1e0) return quantity.ToString("F2");
+        else if (quantity < 1e1) return quantity.ToString("F2");
+        else if (quantity < 1e2) return quantity.ToString("F1");
+        else if (quantity < 1e3) return quantity.ToString("F0");
+        else if (quantity < 1e4) return (quantity / 1e3).ToString("F2") + "K";
+        else if (quantity < 1e5) return (quantity / 1e3).ToString("F1") + "K";
+        else if (quantity < 1e6) return (quantity / 1e3).ToString("F0") + "K";
+        else if (quantity < 1e7) return (quantity / 1e6).ToString("F2") + "M";
+        else if (quantity < 1e8) return (quantity / 1e6).ToString("F1") + "M";
+        else if (quantity < 1e9) return (quantity / 1e6).ToString("F0") + "M";
+        else if (quantity < 1e10) return (quantity / 1e9).ToString("F2") + "B";
+        else if (quantity < 1e11) return (quantity / 1e9).ToString("F1") + "B";
+        else if (quantity < 1e12) return (quantity / 1e9).ToString("F0") + "B";
+        else if (quantity < 1e13) return (quantity / 1e12).ToString("F2") + "T";
+        else if (quantity < 1e14) return (quantity / 1e12).ToString("F1") + "T";
+        else if (quantity < 1e15) return (quantity / 1e12).ToString("F0") + "T";
+        else return "+";
+    }
 }

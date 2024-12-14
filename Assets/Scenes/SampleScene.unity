@@ -273,7 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 0.07
   zoomSpeed: 0.125
-  minHeight: 0.125
+  minHeight: 1.125
   groundLevel: 1
   scroll: 0
   pan: {x: 0, y: 0}
