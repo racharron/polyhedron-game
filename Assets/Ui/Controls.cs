@@ -7,6 +7,9 @@ public class Controls : MonoBehaviour
 {
     //  Indicates that the mouse hasn't moved while the select mouse button was held down.
     bool canSelect = false;
+    float prevLong, prevLat;
+    bool prevOnSphere = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,16 +25,36 @@ public class Controls : MonoBehaviour
             Application.Quit();
             return;
         }
-        Mouse mouse = Mouse.current;
-
+        
+        var mouse = Mouse.current;
         var orbitalCamera = GetComponent<OrbitalCamera>();
-        orbitalCamera.scroll = -mouse.scroll.y.value;
-        if (mouse.press.isPressed) orbitalCamera.pan = -mouse.delta.value;
+
+        if (mouse.scroll.y.value != 0)
+        {
+            orbitalCamera.Zoom(-mouse.scroll.y.value);
+            canSelect = false;
+        }
+        if (mouse.press.IsPressed())
+        {
+            var camera = GetComponent<Camera>();
+            var ray = camera.ScreenPointToRay(mouse.position.value);
+            var currentOnSphere = Raycast(ray, transform.parent.position, orbitalCamera.groundLevel, out var currLong, out var currLat);
+            if (currentOnSphere && prevOnSphere && (prevLong != currLong || prevLat != currLat)) {
+                orbitalCamera.Pan(currLong - prevLong, currLat - prevLat);
+            }
+            canSelect = false;
+            prevLong = currLong;
+            prevLat = currLat;
+            prevOnSphere = currentOnSphere;
+        }
+        else
+        {
+            prevOnSphere = false;
+        }
         if (mouse.press.wasPressedThisFrame)
         {
             canSelect = true;
         }
-        canSelect &= orbitalCamera.scroll == 0 && orbitalCamera.pan == Vector2.zero;
         if (canSelect && mouse.press.wasReleasedThisFrame)
         {
             Ray fromMouse = Camera.main.ScreenPointToRay(mouse.position.value);
@@ -47,6 +70,26 @@ public class Controls : MonoBehaviour
             {
                 gameObject.GetComponent<TileSelector>().Deselect();
             }
+            canSelect = false;
+        }
+    }
+    private static bool Raycast(Ray ray, Vector3 sphereCenter, float radius, out float longditude, out float latitude)
+    {
+        var p = ray.origin - sphereCenter;
+        var dp = Vector3.Dot(ray.direction, p);
+        var det = dp*dp - p.sqrMagnitude + radius;
+        if (det < 0)
+        {
+            longditude = 0;
+            latitude = 0;
+            return false;
+        }
+        else
+        {
+            var intersection = ray.GetPoint(-dp - Mathf.Sqrt(det));
+            longditude = Mathf.Atan2(intersection.y, intersection.x);
+            latitude = Mathf.Asin(intersection.z / radius);
+            return true;
         }
     }
 }

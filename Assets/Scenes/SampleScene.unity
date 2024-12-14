@@ -180,7 +180,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.125
+  near clip plane: 0.0625
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -271,9 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e790936405c26408901eea9810b525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.07
   zoomSpeed: 0.125
-  minHeight: 1.25
+  minHeight: 0.125
   groundLevel: 1
   scroll: 0
   pan: {x: 0, y: 0}
@@ -505,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23e4ac4a6ef41e45badcfd99f9d650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bisections: 3
+  Bisections: 0
   TileMaterial: {fileID: 2100000, guid: f60de4f989de90c458009923a0bf3aad, type: 2}
 --- !u!4 &1478557270
 Transform:
