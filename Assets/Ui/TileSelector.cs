@@ -7,12 +7,6 @@ public class TileSelector : MonoBehaviour
     Tile selected = null;
     float phase = 0;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
     public void Select(Tile tile)
     {
         selected = tile;
@@ -20,7 +14,11 @@ public class TileSelector : MonoBehaviour
     }
     public void Deselect()
     {
-        selected = null;
+        if (selected != null)
+        {
+            selected.GetComponent<MeshRenderer>().material.color = selected.baseColor;
+            selected = null;
+        }
     }
 
     // Update is called once per frame

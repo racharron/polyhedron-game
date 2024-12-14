@@ -6,26 +6,41 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(TileSelector))]
 public class Controls : MonoBehaviour
 {
+    public static Controls active;
+
+    public UnityEvent onPause = new();
+    public UnityEvent onResume= new();
+
     //  Indicates that the mouse hasn't moved while the select mouse button was held down.
     bool canSelect = false;
 
-    public static UnityEvent nextTurn = new();
+    public bool isPaused = false;
+
+    public UnityEvent onNextTurn = new();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        if (active != null)
+        {
+            onPause = active.onPause;
+            onResume = active.onResume;
+            onNextTurn = active.onNextTurn;
+        }
+        active = this;
     }
 
     // Update is called once per frame
     void Update()
     {
         Keyboard keyboard = Keyboard.current;
-        if (keyboard.escapeKey.IsPressed())
+        if (keyboard.escapeKey.wasPressedThisFrame)
         {
-            Application.Quit();
-            return;
+            if (isPaused) onResume.Invoke();
+            else onPause.Invoke();
+            isPaused = !isPaused;
         }
+        if (isPaused) return;
         Mouse mouse = Mouse.current;
 
         var orbitalCamera = GetComponent<OrbitalCamera>();
@@ -52,6 +67,6 @@ public class Controls : MonoBehaviour
                 gameObject.GetComponent<TileSelector>().Deselect();
             }
         }
-        if (keyboard.spaceKey.wasPressedThisFrame) nextTurn.Invoke();
+        if (keyboard.spaceKey.wasPressedThisFrame) onNextTurn.Invoke();
     }
 }

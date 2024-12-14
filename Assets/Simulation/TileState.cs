@@ -1,13 +1,12 @@
 using UnityEngine;
 
-[RequireComponent(typeof(OldTileState))]
 public class TileState : MonoBehaviour
 {
     public State state;
 
     void Start()
     {
-        Controls.nextTurn.AddListener(Tick);
+        Controls.active.onNextTurn.AddListener(Tick);
     }
 
     void Tick()

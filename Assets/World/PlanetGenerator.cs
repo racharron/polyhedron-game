@@ -24,20 +24,19 @@ public class PlanetGenerator : MonoBehaviour
         {
 
             GameObject worldFacet = new() { name = "World Tile " + i };
-            MeshRenderer meshRenderer = worldFacet.AddComponent<MeshRenderer>();
-            meshRenderer.sharedMaterial = TileMaterial;
-
+            
+            worldFacet.AddComponent<MeshRenderer>().sharedMaterial = TileMaterial;
             MeshFilter meshFilter = worldFacet.AddComponent<MeshFilter>();
             Mesh mesh = dual[i].ToMesh();
             meshFilter.mesh = mesh;
-            worldFacet.AddComponent<Tile>();
+            worldFacet.AddComponent<Tile>().baseColor = Random.ColorHSV(0, 1, 0.5f, 0.5f, 0.5f, 0.5f, 1, 1);
             worldFacet.AddComponent<MeshCollider>().sharedMesh = mesh;
             worldFacet.AddComponent<TileState>().state = new()
             {
-                liquidity = Random.Range(1, 10),
-                development = Random.Range(1, 10),
-                infrastructure = Random.Range(1, 10),
-                technology = Random.Range(1, 10)
+                liquidity = Random.Range(1f, 10f),
+                development = Random.Range(1f, 10f),
+                infrastructure = Random.Range(1f, 10f),
+                technology = Random.Range(1f, 10f)
             };
             worldFacet.transform.SetParent(gameObject.transform, false);
             var tileUi = Instantiate(TileCanvas, worldFacet.transform);
@@ -47,10 +46,6 @@ public class PlanetGenerator : MonoBehaviour
             tileUi.transform.localScale = new Vector3(scale, scale, scale);
 
             worldFacets.Add(worldFacet);
-        }
-        for (int i = 0; i < icosphere.vertices.Length; i++)
-        {
-            worldFacets[i].GetComponent<Tile>().neighbors = icosphere.vertices[i].Neighbors.Select(n => worldFacets[n]).ToArray();
         }
     }
 

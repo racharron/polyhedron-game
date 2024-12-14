@@ -1,0 +1,9 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Menu.uss?fileID=7433441132597879392&amp;guid=e95ec735f9eaf41448d3ade9fee300d1&amp;type=3#Menu" />
+    <engine:VisualElement name="Container" class="container" style="flex-grow: 1;">
+        <engine:Label text="Polyhedron Game" name="Title" class="title" />
+        <engine:Button text="New Game" name="New" class="button" />
+        <engine:Button text="Join Game" name="Join" class="button" />
+        <engine:Button text="Quit to Desktop" name="Quit" class="button" />
+    </engine:VisualElement>
+</engine:UXML>

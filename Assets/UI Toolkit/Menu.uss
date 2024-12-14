@@ -1,0 +1,21 @@
+.container {
+    align-items: stretch;
+    align-self: center;
+    justify-content: center;
+}
+
+.title {
+    font-size: 44px;
+    -unity-text-align: middle-center;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.button {
+    font-size: 20px;
+    -unity-text-align: middle-center;
+    border-top-left-radius: 10%;
+    border-top-right-radius: 10%;
+    border-bottom-right-radius: 10%;
+    border-bottom-left-radius: 10%;
+}
